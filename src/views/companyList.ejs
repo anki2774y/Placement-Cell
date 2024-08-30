@@ -1,0 +1,113 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>interviews</h2>
+        </div>
+        <div class="col-md-6 text-right">
+            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#allocateInterviewModal">
+                <i class="fa-solid fa-square-plus"></i> 
+                Allocate Interview
+            </button>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <% if(!locals.formattedData || locals.formattedData.length == 0) { %> 
+                <h2> <i> No companies found ! </i>  </h2>
+            <% } else { %>
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <!-- <th>S.No.</th> -->
+                            <th>Company</th>
+                            <th>Student</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>Batch</th>
+                            <th>Interview Date</th>
+                            <th>Result</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% formattedData.map((data) => { %>
+                            
+                                <tr>
+                                    
+                                    <td> <%= data.companyName %> </td>
+                                    <td> <%= data.studentName %> </td>
+                                    <td> <%= data.studentEmail %> </td>
+                                    <td> <%= data.studentContact %> </td>
+                                    <td> <%= data.studentBatch %> </td>
+                                    <td> <%= data.interviewDate %> </td>
+                                    <td><%= data.result %></td> <!-- Display the current result -->
+                                    <td>
+                                        <form action="/updateInterviewResult" method="post" class="form-inline">
+                                            <input type="hidden" name="studentId" value="<%= data.studentId %>">
+                                            <input type="hidden" name="companyId" value="<%= data.companyId %>">
+                                            <select name="result" class="form-control mr-2">
+                                                <option value="Placed" <%= data.result === 'Placed' ? 'selected' : '' %>>Placed</option>
+                                                <option value="Not-Placed" <%= data.result === 'Not-Placed' ? 'selected' : '' %>>Not-Placed</option>
+                                                <option value="On-Hold" <%= data.result === 'On-Hold' ? 'selected' : '' %>>On-Hold</option>
+                                                <option value="Pending" <%= data.result === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                        <% }) %>                      
+                    </tbody>
+                </table>
+            <% } %> 
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- STUDENT NEW FORM -->
+<div class="modal fade" id="allocateInterviewModal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Form Modal</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+              <form method="post" action="/allocateInterview">
+                  <div class="form-group">
+                      <label for="name">Name:</label>
+                      <select class="form-control" id="name" name="studentId">
+                        <% if(!locals.students || locals.students.length == 0) { %> 
+                          <option> <i> Add Student First!!! </i> </option>
+                        <% } else { %>
+                          <% locals.students.map((student, i) => { %>
+                            <option value="<%= student._id %>"> <%= student.name %> </option>
+                          <% }) %>
+                        <% } %>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label for="name">Company Name:</label>
+                      <input type="text" class="form-control" id="name" name="name">
+                  </div>
+                  <div class="form-group">
+                      <label for="date">Date:</label>
+                      <input type="date" class="form-control" id="date" name="date">
+                  </div>
+
+                  <!-- Modal Footer inside the form -->
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Save</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
